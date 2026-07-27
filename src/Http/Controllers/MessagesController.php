@@ -202,7 +202,7 @@ class MessagesController extends Controller
      */
     public function fetch(Request $request)
     {
-        $query = Chatify::fetchMessagesQuery($request['id'], Auth::guard('sanctum')->user()->id)->latest();
+        $query = Chatify::fetchMessagesQuery($request['id'], Auth::guard('sanctum')->user()->id)->where('sent_by','admin_driver')->latest();
         $messages = $query->paginate($request->per_page ?? $this->perPage);
         $totalMessages = $messages->total();
         $lastPage = $messages->lastPage();
