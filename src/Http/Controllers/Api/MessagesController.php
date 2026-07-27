@@ -166,7 +166,7 @@ class MessagesController extends Controller
                 'from_id' => Auth::guard('sanctum')->user()->id,
                 'to_id' => $request['id'],
                 'body' => htmlentities(trim($request['message']), ENT_QUOTES, 'UTF-8'),
-                'sent_by' => 'user',
+                'sent_by' => 'admin_driver',
                 'attachment' => ($attachment) ? json_encode((object)[
                     'new_name' => $attachment,
                     'old_name' => htmlentities(trim($attachment_title), ENT_QUOTES, 'UTF-8'),
@@ -183,6 +183,8 @@ class MessagesController extends Controller
                 'to_id' => $request['id'],
                 'message' => Chatify::messageCard($messageData, true)
             ]);
+
+            $this->sendPushNotificationRider(Auth::guard('sanctum')->user()->name, $request['message'], $request['id']);
             // }
         }
 
@@ -253,7 +255,7 @@ class MessagesController extends Controller
                 'from_id' => $fromId,
                 'to_id' => $request['to_id'],
                 'body' => htmlentities(trim($request['message']), ENT_QUOTES, 'UTF-8'),
-                'sent_by' => 'user',
+                'sent_by' => 'user_driver',
                 'attachment' => ($attachment) ? json_encode((object)[
                     'new_name' => $attachment,
                     'old_name' => htmlentities(trim($attachment_title), ENT_QUOTES, 'UTF-8'),
@@ -271,7 +273,7 @@ class MessagesController extends Controller
                 'message' => Chatify::messageCard($messageData, true)
             ]);
 
-            if($request->type == 'user') {
+            if($request['type'] == 'user') {
                 $this->sendPushNotificationCustomer(Auth::guard('sanctum')->user()->name, $request['message'], $request['id']);
             }else{
                 $this->sendPushNotificationRider(Auth::guard('sanctum')->user()->name, $request['message'], $request['id']);
