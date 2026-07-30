@@ -169,7 +169,7 @@ class MessagesController extends Controller
                 'from_id' => Auth::guard('sanctum')->user()->id,
                 'to_id' => $request['id'],
                 'body' => htmlentities(trim($request['message']), ENT_QUOTES, 'UTF-8'),
-                'sent_by' => 'admin_driver',
+                'sent_by' => $request['type'] == 'driver' ? 'driver_admin' : 'admin_driver',
                 'attachment' => ($attachment) ? json_encode((object)[
                     'new_name' => $attachment,
                     'old_name' => htmlentities(trim($attachment_title), ENT_QUOTES, 'UTF-8'),
@@ -256,7 +256,7 @@ class MessagesController extends Controller
                 'from_id' => $fromId,
                 'to_id' => $request['to_id'],
                 'body' => htmlentities(trim($request['message']), ENT_QUOTES, 'UTF-8'),
-                'sent_by' => 'user_driver',
+                'sent_by' => $request['type'] == 'driver' ? 'driver_user' : 'user_driver',
                 'attachment' => ($attachment) ? json_encode((object)[
                     'new_name' => $attachment,
                     'old_name' => htmlentities(trim($attachment_title), ENT_QUOTES, 'UTF-8'),
